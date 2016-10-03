@@ -6,17 +6,11 @@ class Contact < ActiveRecord::Base
   has_many :contact_shares,
     primary_key: :id,
     foreign_key: :contact_id,
-    class_name: :Contact
+    class_name: :ContactShare
   has_many :shared_users,
     through: :contact_shares,
     source: :user
 
-  validates :name, :email, presence: true
-  validate :unique_email, on: :create
-
-  def unique_email
-    if self.user.contacts.exists?(email: self.email)
-      self.errors[:email] << "already in contacts"
-    end
-  end
+  validates :name, :email, :user_id, presence: true
+  validates :email, uniqueness: { scope: :user_id }
 end

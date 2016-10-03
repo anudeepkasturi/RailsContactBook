@@ -2,7 +2,9 @@ class ContactsController < ApplicationController
   before_action :set_contact, only: [:show, :update, :destroy]
 
   def index
-    @contacts = Contact.all
+    @contacts = Contact
+                .joins(:contact_shares)
+                .where("contacts.user_id = ? OR contact_shares.user_id = ?", params[:user_id], params[:user_id])
 
     render json: @contacts
   end

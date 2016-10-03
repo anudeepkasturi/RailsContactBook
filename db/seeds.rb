@@ -12,5 +12,5 @@ ish = User.create!(name: "Ish", email: "Ish@me.com")
 tom = Contact.create!(name: "Tom", email: "Tom@whatever.com", user_id: louis.id)
 jerry = Contact.create!(name: "Jerry", email: "Jerry@whatever.com",  user_id: louis.id)
 
-tom_share = ContactShare.create!(user_id: louis.id, contact_id: tom.id)
-jerry_share = ContactShare.create!(user_id: louis.id, contact_id: jerry.id)
+tom_share = ContactShare.create!(user_id: ish.id, contact_id: tom.id)
+jerry_share = ContactShare.create!(user_id: ish.id, contact_id: jerry.id)
