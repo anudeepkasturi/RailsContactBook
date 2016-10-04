@@ -34,9 +34,19 @@ class ContactsController < ApplicationController
     render json: @contact.destroy
   end
 
+  def favorites
+    @contacts = Contact.where("favorited = true AND user_id = ?", params[:user_id])
+    render json: @contacts
+  end
+
+  def groups
+    @contact_groups = ContactGroup.where("contact_groups.user_id = ?", params[:user_id])
+    render text: @contact_groups.to_json(include: :contacts)
+  end
+
   private
   def contact_params
-    params.require(:contact).permit(:name, :email, :user_id)
+    params.require(:contact).permit(:name, :email, :user_id, :favorited)
   end
 
   def set_contact

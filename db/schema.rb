@@ -11,10 +11,39 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20161003215516) do
+ActiveRecord::Schema.define(version: 20161004004542) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+
+  create_table "comments", force: :cascade do |t|
+    t.integer  "commentable_id",   null: false
+    t.string   "commentable_type", null: false
+    t.text     "body",             null: false
+    t.datetime "created_at",       null: false
+    t.datetime "updated_at",       null: false
+  end
+
+  add_index "comments", ["commentable_id", "commentable_type"], name: "index_comments_on_commentable_id_and_commentable_type", using: :btree
+
+  create_table "contact_group_associations", force: :cascade do |t|
+    t.integer  "contact_group_id", null: false
+    t.integer  "contact_id",       null: false
+    t.datetime "created_at",       null: false
+    t.datetime "updated_at",       null: false
+  end
+
+  add_index "contact_group_associations", ["contact_group_id"], name: "index_contact_group_associations_on_contact_group_id", using: :btree
+  add_index "contact_group_associations", ["contact_id"], name: "index_contact_group_associations_on_contact_id", using: :btree
+
+  create_table "contact_groups", force: :cascade do |t|
+    t.integer  "user_id",    null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.string   "name",       null: false
+  end
+
+  add_index "contact_groups", ["user_id"], name: "index_contact_groups_on_user_id", using: :btree
 
   create_table "contact_shares", force: :cascade do |t|
     t.integer  "contact_id", null: false
@@ -28,11 +57,12 @@ ActiveRecord::Schema.define(version: 20161003215516) do
   add_index "contact_shares", ["user_id"], name: "index_contact_shares_on_user_id", using: :btree
 
   create_table "contacts", force: :cascade do |t|
-    t.string   "name",       null: false
-    t.string   "email",      null: false
-    t.integer  "user_id",    null: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.string   "name",                       null: false
+    t.string   "email",                      null: false
+    t.integer  "user_id",                    null: false
+    t.datetime "created_at",                 null: false
+    t.datetime "updated_at",                 null: false
+    t.boolean  "favorited",  default: false, null: false
   end
 
   add_index "contacts", ["user_id", "email"], name: "index_contacts_on_user_id_and_email", unique: true, using: :btree
